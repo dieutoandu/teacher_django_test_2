@@ -90,6 +90,14 @@
 
 {% block content %}
 
+<div id="todo_list">
+
+
+</div>
+
+
+
+
 {% for todo in todos %}
 <div class="todo">
     <div class="meta">
@@ -113,4 +121,42 @@
 {% empty %}
 <p>目前沒有待辦事項。</p>
 {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+    const listDiv= document.querySelector("#todo_list")
+    console.log(listDiv);
+    
+    
+    
+
+    async function get_todolist(){
+        // call api
+        const respone = await fetch('/api/todos/');
+        console.log(respone);
+
+        if(!respone.ok){
+            alert('call api erro');
+            return;
+        }
+
+
+        const todos=await respone.json()
+        console.log(todos);
+
+        listDiv.innerHTML=""
+        todos.forEach((todo)=>{
+            console.log(todo);
+            const li = document.createElement("li");
+            li.textContent=`${todo.title}`;
+            listDiv.appendChild(li)
+        });
+        
+    }
+
+    get_todolist();
+</script>
+
 {% endblock %}
